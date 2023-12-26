@@ -6,6 +6,8 @@
 #include "commands/ls.hpp"
 #include "commands/cd.hpp"
 #include "commands/cat.hpp"
+#include "commands/mkdir.hpp"
+#include "commands/rm.hpp"
 
 #include <string_view>
 #include <magic_enum.hpp>
@@ -37,10 +39,16 @@ std::shared_ptr<command_t> command_parser_t::parse()
                     break;
                 case command_type_t::cd:
                     command_constructed = std::make_shared<cd_t>(arguments);
-                break;
+                    break;
                 case command_type_t::cat:
                     command_constructed = std::make_shared<cat_t>(arguments);
-                break;
+                    break;
+                case command_type_t::mkdir:
+                    command_constructed = std::make_shared<mkdir_t>(arguments);
+                    break;
+                case command_type_t::rm:
+                    command_constructed = std::make_shared<rm_t>(arguments);
+                    break;
                 default:
                     break;
             }

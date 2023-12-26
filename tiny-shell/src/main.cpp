@@ -16,8 +16,6 @@ int main(int argc, char** argv)
 
     std::string input;
 
-    auto i = 0;
-
     while (true)
     {
         std::cout << "tiny-shell> ";
