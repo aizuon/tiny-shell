@@ -10,5 +10,11 @@ enum class command_type_t : uint8_t
     ls,
     cd,
     cat,
+    cp,
+    mkdir,
+    mv,
+    rm,
+    echo,
+    clear,
     END
 };
