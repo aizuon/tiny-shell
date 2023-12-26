@@ -9,5 +9,6 @@ enum class command_type_t : uint8_t
     pwd,
     ls,
     cd,
+    cat,
     END
 };

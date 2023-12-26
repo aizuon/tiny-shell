@@ -1,7 +1,9 @@
 #include "pch.hpp"
 #include "utils.hpp"
 
+#include <cctype>
 #include <sstream>
+#include <algorithm>
 #include <pwd.h>
 #include <grp.h>
 

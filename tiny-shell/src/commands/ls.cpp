@@ -29,7 +29,7 @@ void ls_t::setup_positional_options_description()
 
 int ls_t::execute()
 {
-    fs::path path_to_list = !_path.empty()
+    auto path_to_list = !_path.empty()
                                 ? fs::weakly_canonical(state_t::current_path / fs::path(_path))
                                 : state_t::current_path;
 
@@ -81,13 +81,13 @@ int ls_t::execute()
             auto ftime = fs::last_write_time(entry.path());
             auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                 ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now());
-            std::time_t cftime = std::chrono::system_clock::to_time_t(sctp);
-            std::string mod_time = std::asctime(std::localtime(&cftime));
+            auto cftime = std::chrono::system_clock::to_time_t(sctp);
+            auto mod_time = std::string(std::asctime(std::localtime(&cftime)));
             mod_time.pop_back();
 
             auto perms = get_permissions(entry.status().permissions());
-            std::string nlink_str = std::to_string(fs::hard_link_count(entry.path()));
-            std::string fsize_str = "0";
+            auto nlink_str = std::to_string(fs::hard_link_count(entry.path()));
+            auto fsize_str = std::string("0");
             if (fs::is_regular_file(entry.status()))
             {
                 fsize_str = format_size(fs::file_size(entry.path()), _human_readable);
