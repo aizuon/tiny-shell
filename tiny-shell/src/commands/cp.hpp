@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class cp_t : public command_t
+class cp_t final : public command_t
 {
 public:
     explicit cp_t(const std::string& arguments) : command_t(arguments)

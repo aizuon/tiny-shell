@@ -32,8 +32,8 @@ int mv_t::execute()
         return 1;
     }
 
-    auto source_path = fs::weakly_canonical(state_t::current_path / fs::path(_source));
-    auto destination_path = fs::weakly_canonical(state_t::current_path / fs::path(_destination));
+    const auto source_path = fs::weakly_canonical(state_t::current_path / fs::path(_source));
+    const auto destination_path = fs::weakly_canonical(state_t::current_path / fs::path(_destination));
 
     try
     {

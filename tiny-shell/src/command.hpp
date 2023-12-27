@@ -33,7 +33,7 @@ protected:
         "Allowed options");
     std::shared_ptr<po::positional_options_description> positional_options_description = std::make_shared<
         po::positional_options_description>();
-    std::shared_ptr<po::variables_map> variables_map = std::make_shared<po::variables_map>();;
+    std::shared_ptr<po::variables_map> variables_map = std::make_shared<po::variables_map>();
 
     virtual void setup_options_description();
 

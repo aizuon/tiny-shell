@@ -23,7 +23,7 @@ int export_t::execute()
 {
     for (const auto& kv: _variables)
     {
-        auto pos = kv.find('=');
+        const auto pos = kv.find('=');
         if (pos == std::string::npos)
         {
             std::cerr << "Error: Invalid variable " << kv << "\n";

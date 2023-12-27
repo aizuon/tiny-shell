@@ -20,11 +20,11 @@
 
 std::shared_ptr<command_t> command_parser_t::parse()
 {
-    auto command_view = std::string_view(_command);
+    const auto command_view = std::string_view(_command);
     constexpr auto commands = magic_enum::enum_entries<command_type_t>();
-    for (auto [command, command_string]: commands)
+    for (auto [command, command_string_view]: commands)
     {
-        command_string = to_lowercase(std::string(command_string));
+        auto command_string = to_lowercase(std::string(command_string_view));
         if (_command.starts_with(command_string))
         {
             auto arguments_view = command_view.substr(command_string.size());

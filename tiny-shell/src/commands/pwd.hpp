@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class pwd_t : public command_t
+class pwd_t final : public command_t
 {
 public:
     explicit pwd_t(const std::string& arguments) : command_t(arguments)

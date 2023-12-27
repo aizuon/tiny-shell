@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class mkdir_t : public command_t
+class mkdir_t final : public command_t
 {
 public:
     explicit mkdir_t(const std::string& arguments) : command_t(arguments)

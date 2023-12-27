@@ -7,7 +7,7 @@
 class command_parser_t
 {
 public:
-    command_parser_t(const std::string& command) : _command(command)
+    explicit command_parser_t(const std::string& command) : _command(command)
     {
     }
 

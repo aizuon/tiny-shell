@@ -10,19 +10,17 @@
 
 std::string_view trim(std::string_view sv)
 {
-    auto is_space = [](unsigned char ch) { return std::isspace(ch); };
+    auto is_space = [](const unsigned char ch) { return std::isspace(ch); };
 
-    auto start = std::find_if_not(sv.begin(), sv.end(), is_space);
-    auto end = std::find_if_not(sv.rbegin(), sv.rend(), is_space).base();
+    auto start = std::ranges::find_if_not(sv, is_space);
+    const auto end = std::find_if_not(sv.rbegin(), sv.rend(), is_space).base();
 
     if (start < end)
     {
         return {start, static_cast<std::size_t>(end - start)};
     }
-    else
-    {
-        return {};
-    }
+
+    return {};
 }
 
 std::string preprocess_arguments(const std::string& arguments)
@@ -91,7 +89,7 @@ std::string preprocess_arguments(const std::string& arguments)
     return processed_args;
 }
 
-std::string get_permissions(fs::perms p)
+std::string get_permissions(const fs::perms p)
 {
     std::string perms;
     perms += (p & fs::perms::owner_read) != fs::perms::none ? "r" : "-";
@@ -106,19 +104,19 @@ std::string get_permissions(fs::perms p)
     return perms;
 }
 
-std::string get_username(uid_t uid)
+std::string get_username(const uid_t uid)
 {
     struct passwd* pw = getpwuid(uid);
     return pw ? pw->pw_name : std::to_string(uid);
 }
 
-std::string get_groupname(gid_t gid)
+std::string get_groupname(const gid_t gid)
 {
     struct group* gr = getgrgid(gid);
     return gr ? gr->gr_name : std::to_string(gid);
 }
 
-std::string format_size(uintmax_t size, bool human_readable /*= false*/)
+std::string format_size(const uintmax_t size, const bool human_readable /*= false*/)
 {
     std::ostringstream out;
     if (human_readable)
@@ -126,7 +124,7 @@ std::string format_size(uintmax_t size, bool human_readable /*= false*/)
         static const char* sizes[] = {"B", "K", "M", "G", "T"};
         int order = 0;
         double dbl_size = size;
-        while (dbl_size >= 1024 && order < (sizeof(sizes) / sizeof(*sizes)) - 1)
+        while (dbl_size >= 1024 && order < std::size(sizes) - 1)
         {
             order++;
             dbl_size /= 1024;
@@ -143,7 +141,7 @@ std::string format_size(uintmax_t size, bool human_readable /*= false*/)
 std::string to_lowercase(const std::string& input)
 {
     std::string output = input;
-    std::transform(output.begin(), output.end(), output.begin(),
-                   [](unsigned char c) -> unsigned char { return std::tolower(c); });
+    std::ranges::transform(output, output.begin(),
+                           [](const unsigned char c) -> unsigned char { return std::tolower(c); });
     return output;
 }

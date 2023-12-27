@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class exit_t : public command_t
+class exit_t final : public command_t
 {
 public:
     explicit exit_t(const std::string& arguments) : command_t(arguments)

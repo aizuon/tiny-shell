@@ -2,7 +2,7 @@
 #include "command.hpp"
 #include <vector>
 
-class export_t : public command_t
+class export_t final : public command_t
 {
 public:
     explicit export_t(const std::string& arguments) : command_t(arguments)

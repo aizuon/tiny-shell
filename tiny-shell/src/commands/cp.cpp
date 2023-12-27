@@ -33,8 +33,8 @@ int cp_t::execute()
         return 1;
     }
 
-    auto source_path = fs::weakly_canonical(state_t::current_path / fs::path(_source));
-    auto destination_path = fs::weakly_canonical(state_t::current_path / fs::path(_destination));
+    const auto source_path = fs::weakly_canonical(state_t::current_path / fs::path(_source));
+    const auto destination_path = fs::weakly_canonical(state_t::current_path / fs::path(_destination));
 
     try
     {
@@ -61,14 +61,14 @@ int cp_t::execute()
 
         if (_recursive && fs::is_directory(source_path))
         {
-            auto options = _overwrite
+            const auto options = _overwrite
                                ? fs::copy_options::overwrite_existing | fs::copy_options::recursive
                                : fs::copy_options::recursive;
             fs::copy(source_path, destination_path, options);
         }
         else
         {
-            auto options = _overwrite
+            const auto options = _overwrite
                                ? fs::copy_options::overwrite_existing
                                : fs::copy_options::none;
             fs::copy(source_path, destination_path, options);

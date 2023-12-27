@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class echo_t : public command_t
+class echo_t final : public command_t
 {
 public:
     explicit echo_t(const std::string& arguments) : command_t(arguments)

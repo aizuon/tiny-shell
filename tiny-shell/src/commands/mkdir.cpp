@@ -29,7 +29,7 @@ int mkdir_t::execute()
         return 1;
     }
 
-    auto dir_path = fs::weakly_canonical(state_t::current_path / fs::path(_directory_path));
+    const auto dir_path = fs::weakly_canonical(state_t::current_path / fs::path(_directory_path));
 
     try
     {

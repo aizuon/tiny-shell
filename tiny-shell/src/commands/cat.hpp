@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class cat_t : public command_t
+class cat_t final : public command_t
 {
 public:
     explicit cat_t(const std::string& arguments) : command_t(arguments)

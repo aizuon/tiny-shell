@@ -1,7 +1,7 @@
 #pragma once
 #include "command.hpp"
 
-class ls_t : public command_t
+class ls_t final : public command_t
 {
 public:
     explicit ls_t(const std::string& arguments) : command_t(arguments)

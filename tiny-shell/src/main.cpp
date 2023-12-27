@@ -25,7 +25,7 @@ int main(int argc, char** argv)
         if (!std::getline(std::cin, input))
             break;
 
-        auto parser = std::make_shared<command_parser_t>(input);
+        const auto parser = std::make_shared<command_parser_t>(input);
         auto command = parser->parse();
         if (command != nullptr)
         {
