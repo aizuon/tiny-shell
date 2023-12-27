@@ -12,6 +12,7 @@
 #include "commands/mv.hpp"
 #include "commands/echo.hpp"
 #include "commands/export.hpp"
+#include "commands/clear.hpp"
 
 #include <string_view>
 #include <magic_enum.hpp>
@@ -64,6 +65,9 @@ std::shared_ptr<command_t> command_parser_t::parse()
                     break;
                 case command_type_t::EXPORT:
                     command_constructed = std::make_shared<export_t>(arguments);
+                    break;
+                case command_type_t::CLEAR:
+                    command_constructed = std::make_shared<clear_t>(arguments);
                     break;
                 default:
                     break;
