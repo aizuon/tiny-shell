@@ -1,20 +1,21 @@
 #pragma once
 #include "command.hpp"
+#include <vector>
 
-class cd_t : public command_t
+class export_t : public command_t
 {
 public:
-    explicit cd_t(const std::string& arguments) : command_t(arguments)
+    explicit export_t(const std::string& arguments) : command_t(arguments)
     {
     }
 
-    ~cd_t() override = default;
+    ~export_t() override = default;
 
     int execute() override;
 
     command_type_t get_command_type() const override
     {
-        return command_type_t::CD;
+        return command_type_t::EXPORT;
     }
 
 protected:
@@ -23,5 +24,5 @@ protected:
     void setup_positional_options_description() override;
 
 private:
-    std::string _path;
+    std::vector<std::string> _variables;
 };

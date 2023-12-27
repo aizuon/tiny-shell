@@ -7,7 +7,9 @@
 class command_parser_t
 {
 public:
-    command_parser_t(const std::string& command) : _command(command) {}
+    command_parser_t(const std::string& command) : _command(command)
+    {
+    }
 
     std::shared_ptr<command_t> parse();
 

@@ -4,7 +4,9 @@
 class ls_t : public command_t
 {
 public:
-    explicit ls_t(const std::string& arguments) : command_t(arguments) {}
+    explicit ls_t(const std::string& arguments) : command_t(arguments)
+    {
+    }
 
     ~ls_t() override = default;
 
@@ -12,11 +14,12 @@ public:
 
     command_type_t get_command_type() const override
     {
-        return command_type_t::ls;
+        return command_type_t::LS;
     }
 
 protected:
     void setup_options_description() override;
+
     void setup_positional_options_description() override;
 
 private:

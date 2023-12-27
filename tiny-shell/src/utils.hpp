@@ -18,3 +18,5 @@ std::string get_username(uid_t uid);
 std::string get_groupname(gid_t gid);
 
 std::string format_size(uintmax_t size, bool human_readable = false);
+
+std::string to_lowercase(const std::string& input);

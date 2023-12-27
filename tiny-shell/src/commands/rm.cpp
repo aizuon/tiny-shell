@@ -31,7 +31,7 @@ int rm_t::execute()
         return 1;
     }
 
-    for (const auto&target_path_str: _targets)
+    for (const auto& target_path_str: _targets)
     {
         auto target_path = fs::weakly_canonical(state_t::current_path / fs::path(target_path_str));
 
@@ -55,7 +55,7 @@ int rm_t::execute()
                 return 1;
             }
         }
-        catch (const fs::filesystem_error&e)
+        catch (const fs::filesystem_error& e)
         {
             std::cerr << "Error: " << e.what() << "\n";
             std::cerr.flush();

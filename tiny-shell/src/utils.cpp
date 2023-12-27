@@ -2,6 +2,7 @@
 #include "utils.hpp"
 
 #include <cctype>
+#include <cstdlib>
 #include <sstream>
 #include <algorithm>
 #include <pwd.h>
@@ -16,7 +17,7 @@ std::string_view trim(std::string_view sv)
 
     if (start < end)
     {
-        return { start, static_cast<std::size_t>(end - start) };
+        return {start, static_cast<std::size_t>(end - start)};
     }
     else
     {
@@ -27,6 +28,7 @@ std::string_view trim(std::string_view sv)
 std::string preprocess_arguments(const std::string& arguments)
 {
     std::string processed_args;
+    processed_args.reserve(arguments.size());
     bool in_quotes = false;
     for (size_t i = 0; i < arguments.size(); ++i)
     {
@@ -34,7 +36,42 @@ std::string preprocess_arguments(const std::string& arguments)
         {
             in_quotes = !in_quotes;
         }
-        if (!in_quotes && arguments[i] == '-' && i + 1 < arguments.size() && arguments[i + 1] != ' ' && arguments[i + 1] != '-')
+        else if (!in_quotes && arguments[i] == '$')
+        {
+            size_t j = i + 1;
+            std::string env_var_name;
+            bool curly_brace = false;
+
+            if (j < arguments.size() && arguments[j] == '{')
+            {
+                curly_brace = true;
+                ++j;
+            }
+
+            while (j < arguments.size() && (isalnum(arguments[j]) || arguments[j] == '_'))
+            {
+                env_var_name += arguments[j];
+                ++j;
+            }
+
+            if (curly_brace && j < arguments.size() && arguments[j] == '}')
+            {
+                ++j;
+            }
+            else if (curly_brace)
+            {
+                continue;
+            }
+
+            const char* env_var_value = std::getenv(env_var_name.c_str());
+            if (env_var_value)
+            {
+                processed_args += env_var_value;
+            }
+            i = j - 1;
+        }
+        else if (!in_quotes && arguments[i] == '-' && i + 1 < arguments.size() && arguments[i + 1] != ' ' && arguments[
+                     i + 1] != '-')
         {
             size_t j = i + 1;
             while (j < arguments.size() && arguments[j] != ' ' && arguments[j] != '-')
@@ -57,15 +94,15 @@ std::string preprocess_arguments(const std::string& arguments)
 std::string get_permissions(fs::perms p)
 {
     std::string perms;
-    perms += ((p & fs::perms::owner_read) != fs::perms::none ? "r" : "-");
-    perms += ((p & fs::perms::owner_write) != fs::perms::none ? "w" : "-");
-    perms += ((p & fs::perms::owner_exec) != fs::perms::none ? "x" : "-");
-    perms += ((p & fs::perms::group_read) != fs::perms::none ? "r" : "-");
-    perms += ((p & fs::perms::group_write) != fs::perms::none ? "w" : "-");
-    perms += ((p & fs::perms::group_exec) != fs::perms::none ? "x" : "-");
-    perms += ((p & fs::perms::others_read) != fs::perms::none ? "r" : "-");
-    perms += ((p & fs::perms::others_write) != fs::perms::none ? "w" : "-");
-    perms += ((p & fs::perms::others_exec) != fs::perms::none ? "x" : "-");
+    perms += (p & fs::perms::owner_read) != fs::perms::none ? "r" : "-";
+    perms += (p & fs::perms::owner_write) != fs::perms::none ? "w" : "-";
+    perms += (p & fs::perms::owner_exec) != fs::perms::none ? "x" : "-";
+    perms += (p & fs::perms::group_read) != fs::perms::none ? "r" : "-";
+    perms += (p & fs::perms::group_write) != fs::perms::none ? "w" : "-";
+    perms += (p & fs::perms::group_exec) != fs::perms::none ? "x" : "-";
+    perms += (p & fs::perms::others_read) != fs::perms::none ? "r" : "-";
+    perms += (p & fs::perms::others_write) != fs::perms::none ? "w" : "-";
+    perms += (p & fs::perms::others_exec) != fs::perms::none ? "x" : "-";
     return perms;
 }
 
@@ -86,7 +123,7 @@ std::string format_size(uintmax_t size, bool human_readable /*= false*/)
     std::ostringstream out;
     if (human_readable)
     {
-        static const char* sizes[] = { "B", "K", "M", "G", "T" };
+        static const char* sizes[] = {"B", "K", "M", "G", "T"};
         int order = 0;
         double dbl_size = size;
         while (dbl_size >= 1024 && order < (sizeof(sizes) / sizeof(*sizes)) - 1)
@@ -101,4 +138,12 @@ std::string format_size(uintmax_t size, bool human_readable /*= false*/)
         out << size;
     }
     return out.str();
+}
+
+std::string to_lowercase(const std::string& input)
+{
+    std::string output = input;
+    std::transform(output.begin(), output.end(), output.begin(),
+                   [](unsigned char c) -> unsigned char { return std::tolower(c); });
+    return output;
 }

@@ -4,7 +4,9 @@
 class cat_t : public command_t
 {
 public:
-    explicit cat_t(const std::string& arguments) : command_t(arguments) {}
+    explicit cat_t(const std::string& arguments) : command_t(arguments)
+    {
+    }
 
     ~cat_t() override = default;
 
@@ -12,11 +14,12 @@ public:
 
     command_type_t get_command_type() const override
     {
-        return command_type_t::cat;
+        return command_type_t::CAT;
     }
 
 protected:
     void setup_options_description() override;
+
     void setup_positional_options_description() override;
 
 private:

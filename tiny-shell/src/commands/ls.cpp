@@ -30,8 +30,8 @@ void ls_t::setup_positional_options_description()
 int ls_t::execute()
 {
     auto path_to_list = !_path.empty()
-                                ? fs::weakly_canonical(state_t::current_path / fs::path(_path))
-                                : state_t::current_path;
+                            ? fs::weakly_canonical(state_t::current_path / fs::path(_path))
+                            : state_t::current_path;
 
     if (!fs::exists(path_to_list) || !fs::is_directory(path_to_list))
     {
@@ -41,7 +41,7 @@ int ls_t::execute()
     }
 
     std::vector<fs::directory_entry> entries;
-    for (const auto&entry: fs::directory_iterator(path_to_list))
+    for (const auto& entry: fs::directory_iterator(path_to_list))
     {
         if (!_all && entry.path().filename().string().front() == '.')
         {
@@ -52,7 +52,7 @@ int ls_t::execute()
 
     if (_sort_time)
     {
-        std::sort(entries.begin(), entries.end(), [](const fs::directory_entry&a, const fs::directory_entry&b)
+        std::sort(entries.begin(), entries.end(), [](const fs::directory_entry& a, const fs::directory_entry& b)
         {
             return fs::last_write_time(a.path()) > fs::last_write_time(b.path());
         });
@@ -65,7 +65,7 @@ int ls_t::execute()
 
     size_t max_nlink_width = 0;
     size_t max_fsize_width = 0;
-    for (const auto&entry: entries)
+    for (const auto& entry: entries)
     {
         if (fs::is_regular_file(entry.status()))
         {
@@ -74,7 +74,7 @@ int ls_t::execute()
         max_nlink_width = std::max(max_nlink_width, std::to_string(fs::hard_link_count(entry.path())).length());
     }
 
-    for (const auto&entry: entries)
+    for (const auto& entry: entries)
     {
         if (_long_format)
         {

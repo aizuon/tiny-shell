@@ -8,6 +8,10 @@
 #include "commands/cat.hpp"
 #include "commands/mkdir.hpp"
 #include "commands/rm.hpp"
+#include "commands/cp.hpp"
+#include "commands/mv.hpp"
+#include "commands/echo.hpp"
+#include "commands/export.hpp"
 
 #include <string_view>
 #include <magic_enum.hpp>
@@ -19,35 +23,47 @@ std::shared_ptr<command_t> command_parser_t::parse()
     constexpr auto commands = magic_enum::enum_entries<command_type_t>();
     for (auto [command, command_string]: commands)
     {
-        auto command_string_view = std::string_view(command_string);
+        command_string = to_lowercase(std::string(command_string));
         if (_command.starts_with(command_string))
         {
-            auto arguments_view = command_view.substr(command_string_view.size());
+            auto arguments_view = command_view.substr(command_string.size());
             arguments_view = trim(arguments_view);
             auto arguments = std::string(arguments_view);
             std::shared_ptr<command_t> command_constructed = nullptr;
             switch (command)
             {
-                case command_type_t::exit:
+                case command_type_t::EXIT:
                     command_constructed = std::make_shared<exit_t>(arguments);
                     break;
-                case command_type_t::pwd:
+                case command_type_t::PWD:
                     command_constructed = std::make_shared<pwd_t>(arguments);
                     break;
-                case command_type_t::ls:
+                case command_type_t::LS:
                     command_constructed = std::make_shared<ls_t>(arguments);
                     break;
-                case command_type_t::cd:
+                case command_type_t::CD:
                     command_constructed = std::make_shared<cd_t>(arguments);
                     break;
-                case command_type_t::cat:
+                case command_type_t::CAT:
                     command_constructed = std::make_shared<cat_t>(arguments);
                     break;
-                case command_type_t::mkdir:
+                case command_type_t::MKDIR:
                     command_constructed = std::make_shared<mkdir_t>(arguments);
                     break;
-                case command_type_t::rm:
+                case command_type_t::RM:
                     command_constructed = std::make_shared<rm_t>(arguments);
+                    break;
+                case command_type_t::CP:
+                    command_constructed = std::make_shared<cp_t>(arguments);
+                    break;
+                case command_type_t::MV:
+                    command_constructed = std::make_shared<mv_t>(arguments);
+                    break;
+                case command_type_t::ECHO:
+                    command_constructed = std::make_shared<echo_t>(arguments);
+                    break;
+                case command_type_t::EXPORT:
+                    command_constructed = std::make_shared<export_t>(arguments);
                     break;
                 default:
                     break;

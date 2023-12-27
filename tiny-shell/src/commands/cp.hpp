@@ -1,20 +1,20 @@
 #pragma once
 #include "command.hpp"
 
-class cd_t : public command_t
+class cp_t : public command_t
 {
 public:
-    explicit cd_t(const std::string& arguments) : command_t(arguments)
+    explicit cp_t(const std::string& arguments) : command_t(arguments)
     {
     }
 
-    ~cd_t() override = default;
+    ~cp_t() override = default;
 
     int execute() override;
 
     command_type_t get_command_type() const override
     {
-        return command_type_t::CD;
+        return command_type_t::CP;
     }
 
 protected:
@@ -23,5 +23,8 @@ protected:
     void setup_positional_options_description() override;
 
 private:
-    std::string _path;
+    bool _recursive = false;
+    bool _overwrite = false;
+    std::string _source;
+    std::string _destination;
 };

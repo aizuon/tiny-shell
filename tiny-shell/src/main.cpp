@@ -1,7 +1,7 @@
 #include "pch.hpp"
+#include <stdlib.h>
 #include <iostream>
 #include <string>
-#include <memory>
 
 #include "command_parser.hpp"
 

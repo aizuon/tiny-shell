@@ -4,7 +4,7 @@
 class rm_t : public command_t
 {
 public:
-    explicit rm_t(const std::string&arguments) : command_t(arguments)
+    explicit rm_t(const std::string& arguments) : command_t(arguments)
     {
     }
 
@@ -14,7 +14,7 @@ public:
 
     command_type_t get_command_type() const override
     {
-        return command_type_t::rm;
+        return command_type_t::RM;
     }
 
 protected:
