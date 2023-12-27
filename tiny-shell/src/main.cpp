@@ -1,7 +1,8 @@
 #include "pch.hpp"
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <string>
+#include <memory>
 
 #include "command_parser.hpp"
 
@@ -12,7 +13,7 @@ void atexit_handler()
 
 int main(int argc, char** argv)
 {
-    atexit(atexit_handler);
+    std::atexit(atexit_handler);
 
     std::string input;
 
