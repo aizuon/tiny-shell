@@ -47,6 +47,5 @@ int mkdir_t::execute()
         return 1;
     }
 
-    std::cout.flush();
     return 0;
 }

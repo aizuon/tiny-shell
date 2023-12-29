@@ -1,22 +1,24 @@
 #pragma once
 #include "command.hpp"
+#include <string>
+#include <sstream>
 
-class echo_t final : public command_t
+class grep_t final : public command_t
 {
 public:
-    explicit echo_t(const std::string& arguments, std::shared_ptr<std::stringstream> ostream = nullptr,
+    explicit grep_t(const std::string& arguments, std::shared_ptr<std::stringstream> ostream = nullptr,
                     std::shared_ptr<std::stringstream> istream = nullptr) : command_t(
         arguments, ostream, istream)
     {
     }
 
-    ~echo_t() override = default;
+    ~grep_t() override = default;
 
     int execute() override;
 
     command_type_t get_command_type() const override
     {
-        return command_type_t::ECHO;
+        return command_type_t::GREP;
     }
 
 protected:
@@ -25,6 +27,6 @@ protected:
     void setup_positional_options_description() override;
 
 private:
-    std::string _text;
-    bool _newline = true;
+    std::string _pattern;
+    std::string _input;
 };

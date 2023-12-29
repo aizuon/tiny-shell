@@ -4,7 +4,9 @@
 class cp_t final : public command_t
 {
 public:
-    explicit cp_t(const std::string& arguments) : command_t(arguments)
+    explicit cp_t(const std::string& arguments, std::shared_ptr<std::stringstream> ostream = nullptr,
+                  std::shared_ptr<std::stringstream> istream = nullptr) : command_t(
+        arguments, ostream, istream)
     {
     }
 

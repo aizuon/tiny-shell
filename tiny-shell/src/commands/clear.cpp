@@ -5,8 +5,10 @@
 
 int clear_t::execute()
 {
-    std::cout << "\033[2J\033[H";
-    std::cout.flush();
+    auto& ostream = get_ostream();
+
+    ostream << "\033[2J\033[H";
+    ostream.flush();
 
     return 0;
 }

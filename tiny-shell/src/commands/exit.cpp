@@ -6,5 +6,4 @@
 int exit_t::execute()
 {
     std::exit(0);
-    return 0;
 }

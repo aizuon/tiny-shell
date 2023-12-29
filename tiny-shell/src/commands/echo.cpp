@@ -22,12 +22,14 @@ void echo_t::setup_positional_options_description()
 
 int echo_t::execute()
 {
-    std::cout << _text;
+    auto& ostream = get_ostream();
+
+    ostream << _text;
     if (_newline)
     {
-        std::cout << "\n";
+        ostream << "\n";
     }
 
-    std::cout.flush();
+    ostream.flush();
     return 0;
 }

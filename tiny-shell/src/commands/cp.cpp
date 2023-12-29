@@ -62,15 +62,15 @@ int cp_t::execute()
         if (_recursive && fs::is_directory(source_path))
         {
             const auto options = _overwrite
-                               ? fs::copy_options::overwrite_existing | fs::copy_options::recursive
-                               : fs::copy_options::recursive;
+                                     ? fs::copy_options::overwrite_existing | fs::copy_options::recursive
+                                     : fs::copy_options::recursive;
             fs::copy(source_path, destination_path, options);
         }
         else
         {
             const auto options = _overwrite
-                               ? fs::copy_options::overwrite_existing
-                               : fs::copy_options::none;
+                                     ? fs::copy_options::overwrite_existing
+                                     : fs::copy_options::none;
             fs::copy(source_path, destination_path, options);
         }
     }
@@ -81,6 +81,5 @@ int cp_t::execute()
         return 1;
     }
 
-    std::cout.flush();
     return 0;
 }

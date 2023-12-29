@@ -23,9 +23,11 @@ void cat_t::setup_positional_options_description()
 
 int cat_t::execute()
 {
+    auto& ostream = get_ostream();
+
     const auto path_to_cat = !_path.empty()
-                           ? fs::weakly_canonical(state_t::current_path / fs::path(_path))
-                           : state_t::current_path;
+                                 ? fs::weakly_canonical(state_t::current_path / fs::path(_path))
+                                 : state_t::current_path;
 
     if (!fs::exists(path_to_cat) || !fs::is_regular_file(path_to_cat))
     {
@@ -41,8 +43,8 @@ int cat_t::execute()
         std::cerr.flush();
         return 1;
     }
-    std::cout << file_stream.rdbuf();
+    ostream << file_stream.rdbuf();
 
-    std::cout.flush();
+    ostream.flush();
     return 0;
 }

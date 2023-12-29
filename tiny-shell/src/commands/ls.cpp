@@ -29,6 +29,8 @@ void ls_t::setup_positional_options_description()
 
 int ls_t::execute()
 {
+    auto& ostream = get_ostream();
+
     auto path_to_list = !_path.empty()
                             ? fs::weakly_canonical(state_t::current_path / fs::path(_path))
                             : state_t::current_path;
@@ -93,7 +95,7 @@ int ls_t::execute()
                 fsize_str = format_size(fs::file_size(entry.path()), _human_readable);
             }
 
-            std::cout << perms << " "
+            ostream << perms << " "
                     << std::setw(max_nlink_width) << nlink_str << " "
                     << std::setw(max_fsize_width) << fsize_str << " "
                     << mod_time << " "
@@ -101,17 +103,17 @@ int ls_t::execute()
 
             if (fs::is_symlink(entry.symlink_status()))
             {
-                std::cout << " -> " << fs::read_symlink(entry.path()).string();
+                ostream << " -> " << fs::read_symlink(entry.path()).string();
             }
 
-            std::cout << "\n";
+            ostream << "\n";
         }
         else
         {
-            std::cout << entry.path().filename().string() << "\n";
+            ostream << entry.path().filename().string() << "\n";
         }
     }
 
-    std::cout.flush();
+    ostream.flush();
     return 0;
 }

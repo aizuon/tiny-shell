@@ -26,10 +26,13 @@ int main(int argc, char** argv)
             break;
 
         const auto parser = std::make_shared<command_parser_t>(input);
-        auto command = parser->parse();
-        if (command != nullptr)
+        auto commands = parser->parse();
+        for (auto& command: commands)
         {
-            command->execute();
+            command->initialize();
+            auto res = command->execute();
+            if (res != 0)
+                break;
         }
     }
 

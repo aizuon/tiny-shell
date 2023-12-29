@@ -28,13 +28,18 @@ std::string preprocess_arguments(const std::string& arguments)
     std::string processed_args;
     processed_args.reserve(arguments.size());
     bool in_quotes = false;
+    bool expect_option = false;
+
     for (size_t i = 0; i < arguments.size(); ++i)
     {
-        if (arguments[i] == '\'' || arguments[i] == '\"')
+        char current_char = arguments[i];
+
+        if (current_char == '\'' || current_char == '\"')
         {
             in_quotes = !in_quotes;
+            processed_args += current_char;
         }
-        else if (!in_quotes && arguments[i] == '$')
+        else if (!in_quotes && current_char == '$')
         {
             size_t j = i + 1;
             std::string env_var_name;
@@ -58,6 +63,9 @@ std::string preprocess_arguments(const std::string& arguments)
             }
             else if (curly_brace)
             {
+                processed_args += '$';
+                processed_args += '{';
+                processed_args += env_var_name;
                 continue;
             }
 
@@ -68,22 +76,30 @@ std::string preprocess_arguments(const std::string& arguments)
             }
             i = j - 1;
         }
-        else if (!in_quotes && arguments[i] == '-' && i + 1 < arguments.size() && arguments[i + 1] != ' ' && arguments[
-                     i + 1] != '-')
+        else if (!in_quotes && current_char == '-' && i + 1 < arguments.size() && isalpha(arguments[i + 1]))
         {
-            size_t j = i + 1;
-            while (j < arguments.size() && arguments[j] != ' ' && arguments[j] != '-')
+            if (expect_option)
             {
                 processed_args += '-';
-                processed_args += arguments[j];
+                processed_args += arguments[i + 1];
                 processed_args += ' ';
-                ++j;
+                ++i;
             }
-            i = j - 1;
+            else
+            {
+                processed_args += current_char;
+            }
+            expect_option = false;
+        }
+        else if (!in_quotes && current_char == '-' && i + 1 < arguments.size() && arguments[i + 1] == ' ')
+        {
+            expect_option = true;
+            processed_args += current_char;
         }
         else
         {
-            processed_args += arguments[i];
+            processed_args += current_char;
+            expect_option = false;
         }
     }
     return processed_args;

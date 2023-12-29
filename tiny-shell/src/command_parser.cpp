@@ -11,16 +11,50 @@
 #include "commands/cp.hpp"
 #include "commands/mv.hpp"
 #include "commands/echo.hpp"
+#include "commands/grep.hpp"
 #include "commands/export.hpp"
 #include "commands/clear.hpp"
 
 #include <string_view>
 #include <magic_enum.hpp>
 
-
-std::shared_ptr<command_t> command_parser_t::parse()
+std::vector<std::shared_ptr<command_t>> command_parser_t::parse()
 {
-    const auto command_view = std::string_view(_command);
+    std::vector<std::shared_ptr<command_t>> pipeline;
+    std::istringstream command_stream(_command);
+    std::string segment;
+    std::shared_ptr<std::stringstream> previous_stream = nullptr;
+
+    while (std::getline(command_stream, segment, '|'))
+    {
+        segment = trim(segment);
+        _command = segment;
+
+        char next_char = command_stream.peek();
+
+        bool is_last_segment = next_char == std::istringstream::traits_type::eof();
+
+        std::shared_ptr<std::stringstream> current_stream = is_last_segment
+                                                                ? nullptr
+                                                                : std::make_shared<std::stringstream>();
+
+        auto cmd = parse_segment(segment, current_stream, previous_stream);
+        if (cmd)
+        {
+            pipeline.push_back(cmd);
+        }
+
+        previous_stream = current_stream;
+    }
+
+    return pipeline;
+}
+
+std::shared_ptr<command_t> command_parser_t::parse_segment(const std::string& segment,
+                                                           std::shared_ptr<std::stringstream> ostream,
+                                                           std::shared_ptr<std::stringstream> istream)
+{
+    const auto command_view = std::string_view(segment);
     constexpr auto commands = magic_enum::enum_entries<command_type_t>();
     for (auto [command, command_string_view]: commands)
     {
@@ -34,46 +68,47 @@ std::shared_ptr<command_t> command_parser_t::parse()
             switch (command)
             {
                 case command_type_t::EXIT:
-                    command_constructed = std::make_shared<exit_t>(arguments);
+                    command_constructed = std::make_shared<exit_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::PWD:
-                    command_constructed = std::make_shared<pwd_t>(arguments);
+                    command_constructed = std::make_shared<pwd_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::LS:
-                    command_constructed = std::make_shared<ls_t>(arguments);
+                    command_constructed = std::make_shared<ls_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::CD:
-                    command_constructed = std::make_shared<cd_t>(arguments);
+                    command_constructed = std::make_shared<cd_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::CAT:
-                    command_constructed = std::make_shared<cat_t>(arguments);
+                    command_constructed = std::make_shared<cat_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::MKDIR:
-                    command_constructed = std::make_shared<mkdir_t>(arguments);
+                    command_constructed = std::make_shared<mkdir_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::RM:
-                    command_constructed = std::make_shared<rm_t>(arguments);
+                    command_constructed = std::make_shared<rm_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::CP:
-                    command_constructed = std::make_shared<cp_t>(arguments);
+                    command_constructed = std::make_shared<cp_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::MV:
-                    command_constructed = std::make_shared<mv_t>(arguments);
+                    command_constructed = std::make_shared<mv_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::ECHO:
-                    command_constructed = std::make_shared<echo_t>(arguments);
+                    command_constructed = std::make_shared<echo_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::GREP:
+                    command_constructed = std::make_shared<grep_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::EXPORT:
-                    command_constructed = std::make_shared<export_t>(arguments);
+                    command_constructed = std::make_shared<export_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::CLEAR:
-                    command_constructed = std::make_shared<clear_t>(arguments);
+                    command_constructed = std::make_shared<clear_t>(arguments, ostream, istream);
                     break;
                 default:
                     break;
             }
-            if (command_constructed != nullptr)
-                command_constructed->initialize();
             return command_constructed;
         }
     }

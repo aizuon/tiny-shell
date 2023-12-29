@@ -1,7 +1,15 @@
 #include "command.hpp"
 
+#include <fmt/core.h>
+
 void command_t::initialize()
 {
+    if (_istream != nullptr)
+    {
+        _istream->clear();
+        _istream->seekg(0, std::ios::beg);
+        _arguments += fmt::format(" \"{}\"", _istream->str());
+    }
     setup_options_description();
     setup_positional_options_description();
     setup_variables_map(preprocess_arguments(_arguments));

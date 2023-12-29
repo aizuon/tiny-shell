@@ -12,6 +12,9 @@ target_link_libraries(tiny-shell PRIVATE Boost::program_options)
 find_package(magic_enum CONFIG REQUIRED)
 target_link_libraries(tiny-shell PRIVATE magic_enum::magic_enum)
 
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(tiny-shell PRIVATE fmt::fmt)
+
 target_include_directories(tiny-shell PUBLIC "${BASE_DIR}")
 
 target_precompile_headers(tiny-shell PRIVATE "${BASE_DIR}/pch.hpp")

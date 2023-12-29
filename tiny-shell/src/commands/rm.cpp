@@ -63,6 +63,5 @@ int rm_t::execute()
         }
     }
 
-    std::cout.flush();
     return 0;
 }

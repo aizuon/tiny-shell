@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <memory>
+#include <sstream>
 
 #include "command.hpp"
 
@@ -11,8 +13,11 @@ public:
     {
     }
 
-    std::shared_ptr<command_t> parse();
+    std::vector<std::shared_ptr<command_t>> parse();
 
 private:
     std::string _command;
+
+    std::shared_ptr<command_t> parse_segment(const std::string& segment, std::shared_ptr<std::stringstream> ostream,
+                                             std::shared_ptr<std::stringstream> istream);
 };

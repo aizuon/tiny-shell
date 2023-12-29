@@ -15,6 +15,7 @@ enum class command_type_t : uint8_t
     MV,
     RM,
     ECHO,
+    GREP,
     CLEAR,
     EXPORT,
     END

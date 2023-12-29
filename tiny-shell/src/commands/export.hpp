@@ -5,7 +5,9 @@
 class export_t final : public command_t
 {
 public:
-    explicit export_t(const std::string& arguments) : command_t(arguments)
+    explicit export_t(const std::string& arguments, std::shared_ptr<std::stringstream> ostream = nullptr,
+                      std::shared_ptr<std::stringstream> istream = nullptr) : command_t(
+        arguments, ostream, istream)
     {
     }
 

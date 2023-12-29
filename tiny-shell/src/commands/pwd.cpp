@@ -4,8 +4,10 @@
 
 int pwd_t::execute()
 {
-    std::cout << state_t::current_path << "\n";
+    auto& ostream = get_ostream();
 
-    std::cout.flush();
+    ostream << state_t::current_path << "\n";
+
+    ostream.flush();
     return 0;
 }
