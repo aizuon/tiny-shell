@@ -14,6 +14,9 @@
 #include "commands/grep.hpp"
 #include "commands/export.hpp"
 #include "commands/clear.hpp"
+#include "commands/touch.hpp"
+#include "commands/chmod.hpp"
+#include "commands/chown.hpp"
 
 #include <string_view>
 #include <magic_enum.hpp>
@@ -70,6 +73,12 @@ std::shared_ptr<command_t> command_parser_t::parse_segment(const std::string& se
                 case command_type_t::EXIT:
                     command_constructed = std::make_shared<exit_t>(arguments, ostream, istream);
                     break;
+                case command_type_t::CHMOD:
+                    command_constructed = std::make_shared<chmod_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::CHOWN:
+                    command_constructed = std::make_shared<chown_t>(arguments, ostream, istream);
+                    break;
                 case command_type_t::PWD:
                     command_constructed = std::make_shared<pwd_t>(arguments, ostream, istream);
                     break;
@@ -78,6 +87,9 @@ std::shared_ptr<command_t> command_parser_t::parse_segment(const std::string& se
                     break;
                 case command_type_t::CD:
                     command_constructed = std::make_shared<cd_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::TOUCH:
+                    command_constructed = std::make_shared<touch_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::CAT:
                     command_constructed = std::make_shared<cat_t>(arguments, ostream, istream);
