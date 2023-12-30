@@ -17,6 +17,11 @@
 #include "commands/touch.hpp"
 #include "commands/chmod.hpp"
 #include "commands/chown.hpp"
+#include "commands/find.hpp"
+#include "commands/head.hpp"
+#include "commands/tail.hpp"
+#include "commands/uniq.hpp"
+#include "commands/wc.hpp"
 
 #include <string_view>
 #include <magic_enum.hpp>
@@ -42,11 +47,7 @@ std::vector<std::shared_ptr<command_t>> command_parser_t::parse()
                                                                 : std::make_shared<std::stringstream>();
 
         auto cmd = parse_segment(segment, current_stream, previous_stream);
-        if (cmd)
-        {
-            pipeline.push_back(cmd);
-        }
-
+        pipeline.push_back(cmd);
         previous_stream = current_stream;
     }
 
@@ -90,6 +91,21 @@ std::shared_ptr<command_t> command_parser_t::parse_segment(const std::string& se
                     break;
                 case command_type_t::TOUCH:
                     command_constructed = std::make_shared<touch_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::FIND:
+                    command_constructed = std::make_shared<find_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::HEAD:
+                    command_constructed = std::make_shared<head_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::TAIL:
+                    command_constructed = std::make_shared<tail_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::UNIQ:
+                    command_constructed = std::make_shared<uniq_t>(arguments, ostream, istream);
+                    break;
+                case command_type_t::WC:
+                    command_constructed = std::make_shared<wc_t>(arguments, ostream, istream);
                     break;
                 case command_type_t::CAT:
                     command_constructed = std::make_shared<cat_t>(arguments, ostream, istream);

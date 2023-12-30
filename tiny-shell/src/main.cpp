@@ -29,6 +29,12 @@ int main(int argc, char** argv)
         auto commands = parser->parse();
         for (auto& command: commands)
         {
+            if (command == nullptr)
+            {
+                std::cerr << "Command not found.\n";
+                std::cerr.flush();
+                break;
+            }
             command->initialize();
             auto res = command->execute();
             if (res != 0)
